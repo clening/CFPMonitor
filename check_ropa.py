@@ -32,7 +32,8 @@ def get_staged_diff() -> str:
 def analyze_diff(diff: str, client: anthropic.Anthropic, model: str) -> str | None:
     """Ask Claude if the diff contains ROPA-relevant changes.
 
-    Returns suggested GOVERNANCE.md text if yes, None if no changes needed."""
+    Returns suggested GOVERNANCE.md text if yes, None if no changes needed.
+    Diffs are truncated to 8000 chars — large commits may miss late-file changes."""
     response = client.messages.create(
         model=model,
         max_tokens=800,
@@ -64,7 +65,7 @@ Git diff:
 
 
 def update_governance(suggested_text: str) -> None:
-    """Append the suggested update to GOVERNANCE.md."""
+    """Append the suggested update to GOVERNANCE.md. Mode "a" creates the file if absent."""
     with open(GOVERNANCE_FILE, "a") as f:
         f.write(f"\n{suggested_text}\n")
 
