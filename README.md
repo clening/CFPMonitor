@@ -80,4 +80,3 @@ Review any `# VERIFY:` lines before finalizing a commit.
 source venv/bin/activate
 pytest tests/ -v
 ```
-# test hook smoke test
