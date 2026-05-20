@@ -187,7 +187,7 @@ def update_seeds(new_sources: list[dict], seeds_path: str = "seeds.yaml") -> int
     added = 0
     for source in new_sources:
         if source.get("url") and source["url"] not in existing_urls:
-            seeds_data["sites"].append({
+            seeds_data.setdefault("sites", []).append({
                 "url": source["url"],
                 "notes": source.get("notes", "Discovered by agent"),
             })
