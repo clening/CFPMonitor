@@ -1,0 +1,13 @@
+# Subject areas the agent searches for.
+# These are injected into each session's task message at runtime — no code changes needed.
+# Add, remove, or rephrase freely.
+topics:
+  - AI governance and policy
+  - AI safety
+  - global disempowerment and power consolidation
+  - algorithmic accountability and fairness
+  - privacy and surveillance
+  - civil liberties and fundamental rights
+  - tech accountability
+  - surveillance capitalism
+  - ungovernable systems and regulatory failure

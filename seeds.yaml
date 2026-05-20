@@ -1,0 +1,28 @@
+# Sites the agent checks every run.
+# Add or remove freely. The agent appends newly discovered sources automatically.
+# 'notes' explains WHY this site is worth monitoring — helps you decide later whether to keep or cull it.
+sites:
+  - url: https://wikicfp.com
+    notes: "Broad CFP aggregator — good for academic and tech conferences"
+  - url: https://www.usenix.org/conferences
+    notes: "Security and systems conferences with strong CFP culture"
+  - url: https://facctconference.org
+    notes: "ACM FAccT — fairness, accountability, transparency in AI"
+  - url: https://cpdpconferences.org
+    notes: "Computers, Privacy and Data Protection — annual Brussels conference"
+  - url: https://www.eff.org/events
+    notes: "EFF events and activism conferences"
+  - url: https://ainowinstitute.org
+    notes: "AI Now Institute — AI governance and accountability"
+  - url: https://www.iapp.org/conference
+    notes: "International privacy professionals association"
+  - url: https://papercall.io
+    notes: "CFP aggregator — broad but filterable by topic"
+  - url: https://datasociety.net/events
+    notes: "Data & Society — surveillance, power, tech accountability"
+  - url: https://aisafety.com/events-and-training
+    notes: "AI safety events aggregator — broad calendar of conferences and training"
+  - url: https://princint.ai/events/
+    notes: "PIBBSS / Principles of Intelligence — orgs Carey is actively tracking for involvement"
+  - url: https://fra.europa.eu/en/news-and-events/upcoming-events
+    notes: "EU Fundamental Rights Agency — surveillance, rights, power accountability from EU perspective"
