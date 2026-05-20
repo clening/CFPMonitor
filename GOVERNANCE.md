@@ -19,6 +19,7 @@ Updated automatically by check_ropa.py when relevant code changes are committed.
 | Managed Agents API | Anthropic | Runs discovery agent | Topic list, seed URLs, existing URL list, current date |
 | Google Sheets API | Google | Stores discovered events | Event rows: name, type, deadline, dates, organizer, location, URL, topics |
 
+# VERIFY: | 2026-05-20 | GitHub API integrated to push discovered conference events to external repository | (commit pending) |
 ## Data Collected
 
 | Field | Source | Personal data? | Notes |
