@@ -26,6 +26,10 @@ from dotenv import load_dotenv
 
 import sheets
 
+# Ensure logs/ directory exists before setting up file handler.
+# logging.basicConfig fires at import time, so the directory must pre-exist.
+Path("logs").mkdir(exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -76,7 +80,7 @@ def build_task_message(topics: list[str], seeds: list[dict], existing_urls: set[
     Topics and seeds come from yaml files (not the system prompt) so they can be
     updated by editing a file — no agent recreation needed."""
     topics_str = "\n".join(f"- {t}" for t in topics)
-    seeds_str = "\n".join(f"- {s['url']} — {s.get('notes', '')}" for s in seeds)
+    seeds_str = "\n".join(f"- {s.get('url', '')} — {s.get('notes', '')}" for s in seeds)
     existing_str = "\n".join(f"- {url}" for url in sorted(existing_urls)) if existing_urls else "(none yet)"
 
     return f"""Today's date is {today}. Use this as your reference for determining whether events are upcoming or already passed. Do not rely on your training data for the current date.
