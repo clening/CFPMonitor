@@ -17,6 +17,9 @@ from google.oauth2.service_account import Credentials
 # Sheets API scope — read/write to spreadsheets only, nothing else
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+# Column layout — used by setup.py to write headers into row 2 on first run.
+# Kept here (not in setup.py) so the column order is colocated with URL_COL_INDEX,
+# making it easy to verify index 6 is URL without opening the spreadsheet.
 HEADERS = [
     "Name", "Type", "Deadline", "Event Date(s)", "Organizer",
     "Location", "URL", "Topics", "Status", "Notes", "Date Added",
@@ -27,7 +30,10 @@ URL_COL_INDEX = 6
 
 
 def _get_sheet(sheet_id: str, service_account_path: str):
-    """Authenticate and return the first worksheet."""
+    """Authenticate and return the first worksheet.
+
+    Re-authenticates on every call (file I/O + short OAuth handshake).
+    Acceptable for this module's 3-function surface; revisit if it grows."""
     creds = Credentials.from_service_account_file(service_account_path, scopes=SCOPES)
     client = gspread.authorize(creds)
     return client.open_by_key(sheet_id).sheet1

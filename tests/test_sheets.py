@@ -39,6 +39,7 @@ def test_get_existing_urls_returns_url_set(mock_sheet):
 
 def test_append_events_formats_row_correctly(mock_sheet):
     import sheets
+    from datetime import date
     events = [{
         "name": "Test Conf",
         "type": "CFP",
@@ -55,7 +56,8 @@ def test_append_events_formats_row_correctly(mock_sheet):
     assert rows[0][0] == "Test Conf"
     assert rows[0][6] == "https://test.org/cfp"
     assert rows[0][7] == "AI governance, privacy"
-    assert rows[0][8] == "new"   # default status; user edits this
+    assert rows[0][8] == "new"
+    assert rows[0][10] == date.today().isoformat()   # Date Added column
 
 
 def test_append_events_empty_list_does_not_call_api(mock_sheet):
