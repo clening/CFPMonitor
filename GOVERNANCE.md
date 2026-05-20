@@ -65,3 +65,7 @@ Could you please provide the actual git diff output? Once you share it, I'll ana
 Please paste the full diff and I'll provide either:
 - A `# VERIFY:` prefixed table row for GOVERNANCE.md if ROPA-relevant changes exist
 - `NONE` if there are no ROPA-relevant changes
+
+NONE
+
+This diff only modifies the pre-commit hook script to improve symlink resolution. It's a bug fix/refactoring that doesn't introduce any new data processing, APIs, tools, or external service integrations.

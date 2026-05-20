@@ -3,7 +3,7 @@
 # Installed by setup.py as a symlink from .git/hooks/pre-commit.
 # Always exits 0 — suggests and stages updates but never blocks commits.
 
-# Resolve the project root from this script's location (hooks/ dir)
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve through the symlink to find the actual script location (hooks/ dir)
+PROJECT_ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 "$PROJECT_ROOT/venv/bin/python" "$PROJECT_ROOT/check_ropa.py"
 exit 0
