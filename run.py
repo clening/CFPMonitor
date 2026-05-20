@@ -145,7 +145,7 @@ def run_session(client: anthropic.Anthropic, agent_id: str, env_id: str, task_me
         for event in stream:
             if event.type == "agent.message":
                 for block in event.content:
-                    if hasattr(block, "text"):
+                    if block.type == "text":
                         final_text += block.text
             elif event.type == "agent.tool_use":
                 log.info(f"Tool call: {event.name}")
@@ -165,4 +165,10 @@ def extract_json(text: str) -> dict:
     match = re.search(r'\{[\s\S]*\}', text)
     if not match:
         raise ValueError(f"No JSON block found in agent output. Output was:\n{text[:500]}")
-    return json.loads(match.group())
+    try:
+        return json.loads(match.group())
+    except json.JSONDecodeError as e:
+        raise ValueError(
+            f"Matched a JSON-like block but it failed to parse: {e}\n"
+            f"Matched text was:\n{match.group()[:500]}"
+        ) from e

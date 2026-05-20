@@ -81,7 +81,7 @@ def test_extract_json_finds_embedded_json():
     assert result["events"][0]["name"] == "Test"
 
 
-def test_extract_json_handles_json_with_preamble():
+def test_extract_json_handles_markdown_fenced_json():
     import run
     text = "Here are my findings:\n```json\n{\"events\": [], \"new_sources\": []}\n```"
     result = run.extract_json(text)
@@ -110,6 +110,7 @@ def test_run_session_returns_agent_text():
     msg_event = MagicMock()
     msg_event.type = "agent.message"
     text_block = MagicMock()
+    text_block.type = "text"
     text_block.text = '{"events": [], "new_sources": []}'
     msg_event.content = [text_block]
 
