@@ -14,7 +14,8 @@ def test_get_staged_diff_returns_git_output():
 def test_analyze_diff_returns_none_when_no_ropa_changes():
     import check_ropa
     mock_client = MagicMock()
-    mock_client.messages.create.return_value.content = [MagicMock(text="NONE")]
+    # Prefill is "{" so model completes with "none": true}
+    mock_client.messages.create.return_value.content = [MagicMock(text='"none": true}')]
     result = check_ropa.analyze_diff("minor bug fix in extract_json", mock_client, "claude-haiku-4-5-20251001")
     assert result is None
 
@@ -22,8 +23,9 @@ def test_analyze_diff_returns_none_when_no_ropa_changes():
 def test_analyze_diff_returns_dict_on_ropa_change():
     import check_ropa
     mock_client = MagicMock()
+    # Prefill is "{" so model completes the rest of the JSON object
     mock_client.messages.create.return_value.content = [
-        MagicMock(text='{"section": "External API Calls", "entry": "# VERIFY: | 2026-05-20 | Added sendgrid SDK | (commit pending) |"}')
+        MagicMock(text='"section": "External API Calls", "entry": "# VERIFY: | 2026-05-20 | Added sendgrid SDK | (commit pending) |"}')
     ]
     result = check_ropa.analyze_diff("+import sendgrid", mock_client, "claude-haiku-4-5-20251001")
     assert result is not None

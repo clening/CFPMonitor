@@ -46,9 +46,10 @@ def analyze_diff(diff: str, client: anthropic.Anthropic, model: str) -> dict | N
     response = client.messages.create(
         model=model,
         max_tokens=200,
-        messages=[{
-            "role": "user",
-            "content": f"""You are reviewing a git diff for CFPMonitor, a conference discovery tool.
+        messages=[
+            {
+                "role": "user",
+                "content": f"""You are reviewing a git diff for CFPMonitor, a conference discovery tool.
 
 Analyze this diff for ROPA-relevant changes. Each change type maps to a GOVERNANCE.md section:
 - New AI/agent tools added or removed → "Agent Tools"
@@ -56,28 +57,36 @@ Analyze this diff for ROPA-relevant changes. Each change type maps to a GOVERNAN
 - New data fields being collected, stored, or transmitted → "Data Collected"
 - New external services receiving data → "External API Calls"
 
-If ROPA-relevant, respond with ONLY this JSON — no explanation, no other text:
+If ROPA-relevant, complete this JSON (fill in section and description):
 {{"section": "<Agent Tools|External API Calls|Data Collected|Change Log>", "entry": "# VERIFY: | {date.today().isoformat()} | [one-line description] | (commit pending) |"}}
 
-If NOT ROPA-relevant (bug fixes, refactors, docs, config tweaks, test changes), respond with ONLY:
-NONE
+If NOT ROPA-relevant (bug fixes, refactors, docs, config tweaks, test changes), respond with:
+{{"none": true}}
 
 Git diff:
 {diff[:8000]}""",
-        }],
+            },
+            {
+                "role": "assistant",
+                "content": "{",  # prefill forces JSON — model must complete the object
+            },
+        ],
     )
 
-    text = response.content[0].text.strip()
-    if text == "NONE":
-        return None
+    # Reconstruct the full JSON (prefill + model completion)
+    text = ("{" + response.content[0].text.strip()).strip()
     try:
-        return json.loads(text)
+        result = json.loads(text)
     except json.JSONDecodeError:
-        # Haiku returned something unparseable — fall back to Change Log with a note
+        # Prefill + model completion produced invalid JSON — fall back gracefully
         return {
             "section": "Change Log",
             "entry": f"# VERIFY: | {date.today().isoformat()} | (auto-detection failed — review diff manually) | (commit pending) |",
         }
+
+    if result.get("none"):
+        return None
+    return result
 
 
 def update_governance(result: dict) -> None:

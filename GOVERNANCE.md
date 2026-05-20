@@ -42,3 +42,6 @@ Updated automatically by check_ropa.py when relevant code changes are committed.
 | 2026-05-20 | Initial ROPA created | — |
 | 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | 447eda1 |
 # VERIFY: | 2026-05-20 | (auto-detection failed — review diff manually) | (commit pending) |
+# VERIFY: | 2026-05-20 | (auto-detection failed — review diff manually) | (commit pending) |
+# VERIFY: | 2026-05-20 | (auto-detection failed — review diff manually) | (commit pending) |
+# VERIFY: | 2026-05-20 | (auto-detection failed — review diff manually) | (commit pending) |
