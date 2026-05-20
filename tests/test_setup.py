@@ -40,10 +40,8 @@ def test_save_ids_to_env_writes_values(tmp_path):
     setup.save_ids_to_env("agent_123", "env_456", str(env_file))
 
     content = env_file.read_text()
-    assert "AGENT_ID" in content
-    assert "agent_123" in content
-    assert "ENVIRONMENT_ID" in content
-    assert "env_456" in content
+    assert "AGENT_ID='agent_123'" in content
+    assert "ENVIRONMENT_ID='env_456'" in content
 
 
 def test_install_hook_creates_symlink(tmp_path):
