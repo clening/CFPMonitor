@@ -18,7 +18,7 @@ def test_get_existing_urls_empty_sheet(mock_sheet):
     # Only metadata + header rows, no data yet
     mock_sheet.get_all_values.return_value = [
         ["Last run: (not yet run)"],
-        ["Name", "Type", "Deadline", "Event Date(s)", "Organizer", "Location", "URL", "Topics", "Status", "Notes", "Date Added"],
+        ["Name", "Type", "Deadline", "Event Date(s)", "Organizer", "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added"],
     ]
     import sheets
     result = sheets.get_existing_urls("sheet123", "sa.json")
@@ -28,9 +28,9 @@ def test_get_existing_urls_empty_sheet(mock_sheet):
 def test_get_existing_urls_returns_url_set(mock_sheet):
     mock_sheet.get_all_values.return_value = [
         ["Last run: 2026-05-20"],
-        ["Name", "Type", "Deadline", "Event Date(s)", "Organizer", "Location", "URL", "Topics", "Status", "Notes", "Date Added"],
-        ["FAccT 2026", "CFP", "2026-01-15", "2026-06-03", "ACM", "Chicago", "https://facctconference.org/2026", "AI", "new", "", "2026-05-20"],
-        ["Test Conf", "Registration", "", "2026-09-01", "Test Org", "Virtual", "https://testconf.org", "surveillance", "new", "", "2026-05-20"],
+        ["Name", "Type", "Deadline", "Event Date(s)", "Organizer", "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added"],
+        ["FAccT 2026", "CFP", "2026-01-15", "2026-06-03", "ACM", "", "Chicago", "https://facctconference.org/2026", "AI", "new", "", "2026-05-20"],
+        ["Test Conf", "Registration", "", "2026-09-01", "Test Org", "", "Virtual", "https://testconf.org", "surveillance", "new", "", "2026-05-20"],
     ]
     import sheets
     result = sheets.get_existing_urls("sheet123", "sa.json")
@@ -46,6 +46,7 @@ def test_append_events_formats_row_correctly(mock_sheet):
         "deadline": "2026-08-01",
         "event_dates": "2026-10-01 to 2026-10-03",
         "organizer": "Test Org",
+        "organizer_email": "cfp@test.org",
         "location": "Virtual",
         "url": "https://test.org/cfp",
         "topics": ["AI governance", "privacy"],
@@ -54,10 +55,11 @@ def test_append_events_formats_row_correctly(mock_sheet):
     assert count == 1
     rows = mock_sheet.append_rows.call_args[0][0]
     assert rows[0][0] == "Test Conf"
-    assert rows[0][6] == "https://test.org/cfp"
-    assert rows[0][7] == "AI governance, privacy"
-    assert rows[0][8] == "new"
-    assert rows[0][10] == date.today().isoformat()   # Date Added column
+    assert rows[0][5] == "cfp@test.org"       # Organizer Email
+    assert rows[0][7] == "https://test.org/cfp"   # URL moved to index 7
+    assert rows[0][8] == "AI governance, privacy"
+    assert rows[0][9] == "new"
+    assert rows[0][11] == date.today().isoformat()   # Date Added column
 
 
 def test_append_events_empty_list_does_not_call_api(mock_sheet):

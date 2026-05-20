@@ -39,3 +39,29 @@ Updated automatically by check_ropa.py when relevant code changes are committed.
 | Date | Change | Commit |
 |------|--------|--------|
 | 2026-05-20 | Initial ROPA created | — |
+
+I'm ready to analyze a git diff for CFPMonitor and identify ROPA-relevant changes. However, I don't see an actual diff content in your message—you've written "some diff" as a placeholder.
+
+Please provide the actual git diff output, and I'll review it for:
+
+- New AI/agent tools
+- New third-party APIs or SDKs
+- New data fields collected/stored/transmitted
+- New external services receiving data
+- Changes to data retention/sharing
+
+Then I'll respond with either a ROPA change log entry (prefixed with "# VERIFY: ") or **NONE**.
+
+I'd be happy to help review this diff for ROPA-relevant changes, but I don't see an actual git diff in your message. You've included a placeholder "some diff" instead.
+
+Could you please provide the actual git diff output? Once you share it, I'll analyze it for:
+
+- New AI/agent tools added or removed
+- New third-party APIs or SDKs integrated
+- New data fields being collected, stored, or transmitted
+- New external services receiving data
+- Changes to data retention or sharing behavior
+
+Please paste the full diff and I'll provide either:
+- A `# VERIFY:` prefixed table row for GOVERNANCE.md if ROPA-relevant changes exist
+- `NONE` if there are no ROPA-relevant changes

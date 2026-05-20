@@ -103,6 +103,7 @@ Output a single JSON block with this exact structure — no other text after it:
       "deadline": "YYYY-MM-DD or null",
       "event_dates": "string",
       "organizer": "string",
+      "organizer_email": "email address or null",
       "location": "string or Virtual",
       "url": "string",
       "topics": ["string"]

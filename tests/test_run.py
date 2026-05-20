@@ -6,10 +6,11 @@ import os
 
 def test_load_config_raises_on_missing_env_vars():
     """All six vars are required. Missing any should fail loudly."""
-    with patch.dict("os.environ", {}, clear=True):
-        import run
-        with pytest.raises(ValueError, match="Missing env vars"):
-            run.load_config()
+    with patch("run.load_dotenv"):  # prevent real .env from being loaded
+        with patch.dict("os.environ", {}, clear=True):
+            import run
+            with pytest.raises(ValueError, match="Missing env vars"):
+                run.load_config()
 
 
 def test_load_config_returns_expected_keys(tmp_path):

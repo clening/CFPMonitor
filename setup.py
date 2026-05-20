@@ -45,7 +45,7 @@ Do not include any other text after the JSON block."""
 
 HEADERS = [
     "Name", "Type", "Deadline", "Event Date(s)", "Organizer",
-    "Location", "URL", "Topics", "Status", "Notes", "Date Added",
+    "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added",
 ]
 
 
