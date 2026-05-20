@@ -14,6 +14,7 @@ Why exit 0 always?
 """
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import date
@@ -46,10 +47,9 @@ def analyze_diff(diff: str, client: anthropic.Anthropic, model: str) -> dict | N
     response = client.messages.create(
         model=model,
         max_tokens=200,
-        messages=[
-            {
-                "role": "user",
-                "content": f"""You are reviewing a git diff for CFPMonitor, a conference discovery tool.
+        messages=[{
+            "role": "user",
+            "content": f"""You are reviewing a git diff for CFPMonitor, a conference discovery tool.
 
 Analyze this diff for ROPA-relevant changes. Each change type maps to a GOVERNANCE.md section:
 - New AI/agent tools added or removed → "Agent Tools"
@@ -57,28 +57,30 @@ Analyze this diff for ROPA-relevant changes. Each change type maps to a GOVERNAN
 - New data fields being collected, stored, or transmitted → "Data Collected"
 - New external services receiving data → "External API Calls"
 
-If ROPA-relevant, complete this JSON (fill in section and description):
-{{"section": "<Agent Tools|External API Calls|Data Collected|Change Log>", "entry": "# VERIFY: | {date.today().isoformat()} | [one-line description] | (commit pending) |"}}
+Respond with JSON only — no explanation, no other text before or after:
 
-If NOT ROPA-relevant (bug fixes, refactors, docs, config tweaks, test changes), respond with:
+If ROPA-relevant:
+{{"section": "Agent Tools|External API Calls|Data Collected|Change Log", "entry": "# VERIFY: | {date.today().isoformat()} | [one-line description] | (commit pending) |"}}
+
+If NOT ROPA-relevant (bug fixes, refactors, docs, config tweaks, test changes):
 {{"none": true}}
 
 Git diff:
 {diff[:8000]}""",
-            },
-            {
-                "role": "assistant",
-                "content": "{",  # prefill forces JSON — model must complete the object
-            },
-        ],
+        }],
     )
 
-    # Reconstruct the full JSON (prefill + model completion)
-    text = ("{" + response.content[0].text.strip()).strip()
+    text = response.content[0].text.strip()
+    # Extract JSON robustly — model may include preamble despite instructions
+    match = re.search(r'\{[\s\S]*\}', text)
+    if not match:
+        return {
+            "section": "Change Log",
+            "entry": f"# VERIFY: | {date.today().isoformat()} | (auto-detection failed — review diff manually) | (commit pending) |",
+        }
     try:
-        result = json.loads(text)
+        result = json.loads(match.group())
     except json.JSONDecodeError:
-        # Prefill + model completion produced invalid JSON — fall back gracefully
         return {
             "section": "Change Log",
             "entry": f"# VERIFY: | {date.today().isoformat()} | (auto-detection failed — review diff manually) | (commit pending) |",
