@@ -25,6 +25,7 @@ Updated automatically by check_ropa.py when relevant code changes are committed.
 |-------|--------|----------------|-------|
 | Conference name | Web scraping | No | Public information |
 | Organizer name | Web scraping | Potentially | Public-facing org/person names |
+| Organizer email | Web scraping | Yes | Contact email — verify scraping is from public CFP pages only |
 | Event dates, location, URL | Web scraping | No | Public information |
 | Topics | Derived by agent | No | Assigned based on content |
 
@@ -39,38 +40,5 @@ Updated automatically by check_ropa.py when relevant code changes are committed.
 | Date | Change | Commit |
 |------|--------|--------|
 | 2026-05-20 | Initial ROPA created | — |
-
-I'm ready to analyze a git diff for CFPMonitor and identify ROPA-relevant changes. However, I don't see an actual diff content in your message—you've written "some diff" as a placeholder.
-
-Please provide the actual git diff output, and I'll review it for:
-
-- New AI/agent tools
-- New third-party APIs or SDKs
-- New data fields collected/stored/transmitted
-- New external services receiving data
-- Changes to data retention/sharing
-
-Then I'll respond with either a ROPA change log entry (prefixed with "# VERIFY: ") or **NONE**.
-
-I'd be happy to help review this diff for ROPA-relevant changes, but I don't see an actual git diff in your message. You've included a placeholder "some diff" instead.
-
-Could you please provide the actual git diff output? Once you share it, I'll analyze it for:
-
-- New AI/agent tools added or removed
-- New third-party APIs or SDKs integrated
-- New data fields being collected, stored, or transmitted
-- New external services receiving data
-- Changes to data retention or sharing behavior
-
-Please paste the full diff and I'll provide either:
-- A `# VERIFY:` prefixed table row for GOVERNANCE.md if ROPA-relevant changes exist
-- `NONE` if there are no ROPA-relevant changes
-
-NONE
-
-This diff only modifies the pre-commit hook script to improve symlink resolution. It's a bug fix/refactoring that doesn't introduce any new data processing, APIs, tools, or external service integrations.
-\n# VERIFY: | 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | 447eda1 |
-
-# VERIFY: | 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | (commit pending) |
-
-**Rationale:** The diff shows a new data field (`organizer_email`) being collected and stored. Email addresses are personal data under GDPR/privacy regulations, and web scraping to collect this data introduces new processing activities that must be documented in the ROPA.
+| 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | 447eda1 |
+# VERIFY: | 2026-05-20 | (auto-detection failed — review diff manually) | (commit pending) |
