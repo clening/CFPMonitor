@@ -115,3 +115,54 @@ Output a single JSON block with this exact structure — no other text after it:
     }}
   ]
 }}"""
+
+
+def run_session(client: anthropic.Anthropic, agent_id: str, env_id: str, task_message: str) -> str:
+    """Create a session, send the task, stream until idle, return the agent's full text output.
+
+    Why wait for status_idle? The agent calls multiple tools in sequence (web_search,
+    then web_fetch on individual pages, then more searches). status_idle is the signal
+    that it has truly finished — not just paused between tool calls."""
+    session = client.beta.sessions.create(
+        agent=agent_id,
+        environment_id=env_id,
+        title=f"CFP discovery {date.today().isoformat()}",
+    )
+    log.info(f"Session created: {session.id}")
+
+    final_text = ""
+
+    with client.beta.sessions.events.stream(session.id) as stream:
+        # Send the task after opening the stream — the API buffers events until the stream attaches
+        client.beta.sessions.events.send(
+            session.id,
+            events=[{
+                "type": "user.message",
+                "content": [{"type": "text", "text": task_message}],
+            }],
+        )
+
+        for event in stream:
+            if event.type == "agent.message":
+                for block in event.content:
+                    if hasattr(block, "text"):
+                        final_text += block.text
+            elif event.type == "agent.tool_use":
+                log.info(f"Tool call: {event.name}")
+            elif event.type == "session.status_idle":
+                log.info("Session idle — agent finished")
+                break
+
+    return final_text
+
+
+def extract_json(text: str) -> dict:
+    """Find and parse the JSON block in the agent's output.
+
+    The agent is instructed to end with a JSON block. We use regex rather than
+    parsing the entire output as JSON because the agent may include reasoning
+    text before the block."""
+    match = re.search(r'\{[\s\S]*\}', text)
+    if not match:
+        raise ValueError(f"No JSON block found in agent output. Output was:\n{text[:500]}")
+    return json.loads(match.group())
