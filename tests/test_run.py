@@ -127,3 +127,38 @@ def test_run_session_returns_agent_text():
 
     assert '{"events": [], "new_sources": []}' in result
     mock_client.beta.sessions.events.send.assert_called_once()
+
+
+def test_update_seeds_appends_new_source(tmp_path):
+    import os, run
+    seeds_file = tmp_path / "seeds.yaml"
+    seeds_file.write_text("sites:\n  - url: https://existing.org\n    notes: existing\n")
+    old_cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        count = run.update_seeds([{"url": "https://new.org", "notes": "newly discovered"}], str(seeds_file))
+        assert count == 1
+        assert "https://new.org" in seeds_file.read_text()
+    finally:
+        os.chdir(old_cwd)
+
+
+def test_update_seeds_skips_duplicates(tmp_path):
+    import os, run
+    seeds_file = tmp_path / "seeds.yaml"
+    seeds_file.write_text("sites:\n  - url: https://existing.org\n    notes: existing\n")
+    old_cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        count = run.update_seeds([{"url": "https://existing.org", "notes": "dupe"}], str(seeds_file))
+        assert count == 0
+    finally:
+        os.chdir(old_cwd)
+
+
+def test_update_seeds_returns_zero_on_empty_list(tmp_path):
+    import run
+    seeds_file = tmp_path / "seeds.yaml"
+    seeds_file.write_text("sites: []\n")
+    count = run.update_seeds([], str(seeds_file))
+    assert count == 0

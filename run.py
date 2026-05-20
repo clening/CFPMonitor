@@ -172,3 +172,77 @@ def extract_json(text: str) -> dict:
             f"Matched a JSON-like block but it failed to parse: {e}\n"
             f"Matched text was:\n{match.group()[:500]}"
         ) from e
+
+
+def update_seeds(new_sources: list[dict], seeds_path: str = "seeds.yaml") -> int:
+    """Append newly discovered sources to seeds.yaml. Returns count added.
+
+    The agent discovers sites we don't know about — this persists them so future
+    runs check those sites automatically without any manual intervention."""
+    with open(seeds_path) as f:
+        seeds_data = yaml.safe_load(f)
+
+    existing_urls = {site["url"] for site in seeds_data.get("sites", [])}
+
+    added = 0
+    for source in new_sources:
+        if source.get("url") and source["url"] not in existing_urls:
+            seeds_data["sites"].append({
+                "url": source["url"],
+                "notes": source.get("notes", "Discovered by agent"),
+            })
+            added += 1
+
+    if added > 0:
+        with open(seeds_path, "w") as f:
+            yaml.dump(seeds_data, f, default_flow_style=False, allow_unicode=True)
+
+    return added
+
+
+def main() -> None:
+    log.info("=== CFPMonitor run started ===")
+
+    config = load_config()
+    client = anthropic.Anthropic(api_key=config["api_key"])
+
+    # Read existing URLs first — passed to agent so it skips already-logged events
+    log.info("Reading existing sheet URLs for deduplication...")
+    existing_urls = sheets.get_existing_urls(config["sheet_id"], config["service_account_path"])
+    log.info(f"Found {len(existing_urls)} existing events in sheet")
+
+    task_message = build_task_message(
+        config["topics"],
+        config["seeds"],
+        existing_urls,
+        date.today().isoformat(),
+    )
+
+    log.info("Starting agent session...")
+    agent_output = run_session(client, config["agent_id"], config["env_id"], task_message)
+
+    log.info("Parsing agent output...")
+    result = extract_json(agent_output)
+
+    events = result.get("events", [])
+    new_sources = result.get("new_sources", [])
+
+    # Deduplicate: O(1) set lookup per event — the set was built from the full sheet above
+    new_events = [e for e in events if e.get("url") not in existing_urls]
+    log.info(f"Agent found {len(events)} events; {len(new_events)} are new")
+
+    if new_events:
+        added = sheets.append_events(config["sheet_id"], config["service_account_path"], new_events)
+        log.info(f"Wrote {added} new events to sheet")
+
+    sheets.update_last_run(config["sheet_id"], config["service_account_path"])
+
+    seeds_added = update_seeds(new_sources) if new_sources else 0
+    if seeds_added:
+        log.info(f"Added {seeds_added} new sources to seeds.yaml")
+
+    log.info(f"=== Run complete: {len(new_events)} new events, {seeds_added} new sources ===")
+
+
+if __name__ == "__main__":
+    main()
