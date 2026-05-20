@@ -12,6 +12,7 @@ Why exit 0 always?
   This hook suggests and stages updates — it never blocks commits. A governance hook
   that breaks git workflow gets bypassed immediately, defeating the whole purpose.
 """
+import json
 import os
 import subprocess
 import sys
@@ -22,6 +23,14 @@ from dotenv import load_dotenv
 
 GOVERNANCE_FILE = "GOVERNANCE.md"
 
+# Maps each ROPA change category to its section in GOVERNANCE.md
+SECTION_MAP = {
+    "Agent Tools": "## Agent Tools",
+    "External API Calls": "## External API Calls",
+    "Data Collected": "## Data Collected",
+    "Change Log": "## Change Log",
+}
+
 
 def get_staged_diff() -> str:
     """Return the staged diff (what's about to be committed)."""
@@ -29,31 +38,29 @@ def get_staged_diff() -> str:
     return result.stdout
 
 
-def analyze_diff(diff: str, client: anthropic.Anthropic, model: str) -> str | None:
+def analyze_diff(diff: str, client: anthropic.Anthropic, model: str) -> dict | None:
     """Ask Claude if the diff contains ROPA-relevant changes.
 
-    Returns suggested GOVERNANCE.md text if yes, None if no changes needed.
+    Returns {"section": "...", "entry": "..."} if yes, None if no changes needed.
     Diffs are truncated to 8000 chars — large commits may miss late-file changes."""
     response = client.messages.create(
         model=model,
-        max_tokens=800,
+        max_tokens=200,
         messages=[{
             "role": "user",
             "content": f"""You are reviewing a git diff for CFPMonitor, a conference discovery tool.
 
-Analyze this diff for changes relevant to a Record of Processing Activities (ROPA).
-ROPA-relevant changes include:
-- New AI/agent tools added or removed
-- New third-party APIs or SDKs integrated (new import statements, new API calls)
-- New data fields being collected, stored, or transmitted
-- New external services receiving data
-- Changes to data retention or sharing behavior
+Analyze this diff for ROPA-relevant changes. Each change type maps to a GOVERNANCE.md section:
+- New AI/agent tools added or removed → "Agent Tools"
+- New third-party APIs or SDKs integrated → "External API Calls"
+- New data fields being collected, stored, or transmitted → "Data Collected"
+- New external services receiving data → "External API Calls"
 
-If there ARE ROPA-relevant changes, respond with a single table row to append to the Change Log in GOVERNANCE.md:
-| {date.today().isoformat()} | [brief description] | (commit pending) |
-Prefix the line with "# VERIFY: " so the human knows to review it before finalizing.
+If ROPA-relevant, respond with ONLY this JSON — no explanation, no other text:
+{{"section": "<Agent Tools|External API Calls|Data Collected|Change Log>", "entry": "# VERIFY: | {date.today().isoformat()} | [one-line description] | (commit pending) |"}}
 
-If there are NO ROPA-relevant changes (bug fixes, refactors, docs, config tweaks), respond with exactly: NONE
+If NOT ROPA-relevant (bug fixes, refactors, docs, config tweaks, test changes), respond with ONLY:
+NONE
 
 Git diff:
 {diff[:8000]}""",
@@ -61,13 +68,46 @@ Git diff:
     )
 
     text = response.content[0].text.strip()
-    return None if text == "NONE" else text
+    if text == "NONE":
+        return None
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        # Haiku returned something unparseable — fall back to Change Log with a note
+        return {
+            "section": "Change Log",
+            "entry": f"# VERIFY: | {date.today().isoformat()} | (auto-detection failed — review diff manually) | (commit pending) |",
+        }
 
 
-def update_governance(suggested_text: str) -> None:
-    """Append the suggested update to GOVERNANCE.md. Mode "a" creates the file if absent."""
-    with open(GOVERNANCE_FILE, "a") as f:
-        f.write(f"\n{suggested_text}\n")
+def update_governance(result: dict) -> None:
+    """Insert the suggested entry under the correct section in GOVERNANCE.md.
+
+    Mode "a" on the fallback open creates the file if absent."""
+    section_header = SECTION_MAP.get(result.get("section", "Change Log"), "## Change Log")
+    entry = result.get("entry", "")
+
+    try:
+        with open(GOVERNANCE_FILE, "r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        with open(GOVERNANCE_FILE, "w") as f:
+            f.write(f"{section_header}\n{entry}\n")
+        return
+
+    if section_header in content:
+        # Insert just before the next ## section (or at end if this is the last section)
+        section_start = content.index(section_header)
+        next_section = content.find("\n## ", section_start + 1)
+        if next_section == -1:
+            content = content.rstrip() + f"\n{entry}\n"
+        else:
+            content = content[:next_section] + f"\n{entry}" + content[next_section:]
+    else:
+        content = content.rstrip() + f"\n\n{section_header}\n{entry}\n"
+
+    with open(GOVERNANCE_FILE, "w") as f:
+        f.write(content)
 
 
 def stage_governance() -> None:
@@ -91,12 +131,12 @@ def main() -> int:
         return 0  # nothing staged, nothing to analyze
 
     client = anthropic.Anthropic(api_key=api_key)
-    suggested = analyze_diff(diff, client, model)
+    result = analyze_diff(diff, client, model)
 
-    if suggested:
-        update_governance(suggested)
+    if result:
+        update_governance(result)
         stage_governance()
-        print("check_ropa: GOVERNANCE.md updated with a suggested ROPA entry — review the # VERIFY line")
+        print(f"check_ropa: GOVERNANCE.md updated under '{result.get('section')}' — review the # VERIFY line")
 
     return 0  # always 0 — suggest-and-stage, never block
 
