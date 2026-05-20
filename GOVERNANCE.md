@@ -69,3 +69,8 @@ Please paste the full diff and I'll provide either:
 NONE
 
 This diff only modifies the pre-commit hook script to improve symlink resolution. It's a bug fix/refactoring that doesn't introduce any new data processing, APIs, tools, or external service integrations.
+\n# VERIFY: | 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | 447eda1 |
+
+# VERIFY: | 2026-05-20 | Added organizer_email field — collects personal contact data from web scraping | (commit pending) |
+
+**Rationale:** The diff shows a new data field (`organizer_email`) being collected and stored. Email addresses are personal data under GDPR/privacy regulations, and web scraping to collect this data introduces new processing activities that must be documented in the ROPA.
