@@ -21,12 +21,12 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 # Kept here (not in setup.py) so the column order is colocated with URL_COL_INDEX,
 # making it easy to verify index 6 is URL without opening the spreadsheet.
 HEADERS = [
-    "Name", "Type", "Deadline", "Event Date(s)", "Organizer",
-    "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added",
+    "Name", "Type", "Deadline", "Event Date(s)", "Start Date",
+    "Organizer", "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added",
 ]
 
-# URL lives in column H (index 7). It's the dedup key — unambiguous, no fuzzy matching needed.
-URL_COL_INDEX = 7
+# URL lives in column I (index 8). It's the dedup key — unambiguous, no fuzzy matching needed.
+URL_COL_INDEX = 8
 
 
 def _get_sheet(sheet_id: str, service_account_path: str):
@@ -70,6 +70,7 @@ def append_events(sheet_id: str, service_account_path: str, events: list[dict]) 
             event.get("type", ""),
             event.get("deadline") or "",
             event.get("event_dates", ""),
+            event.get("start_date") or "",
             event.get("organizer", ""),
             event.get("organizer_email", ""),
             event.get("location", ""),

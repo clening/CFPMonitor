@@ -1,28 +1,350 @@
-# Sites the agent checks every run.
-# Add or remove freely. The agent appends newly discovered sources automatically.
-# 'notes' explains WHY this site is worth monitoring — helps you decide later whether to keep or cull it.
 sites:
-  - url: https://wikicfp.com
-    notes: "Broad CFP aggregator — good for academic and tech conferences"
-  - url: https://www.usenix.org/conferences
-    notes: "Security and systems conferences with strong CFP culture"
-  - url: https://facctconference.org
-    notes: "ACM FAccT — fairness, accountability, transparency in AI"
-  - url: https://cpdpconferences.org
-    notes: "Computers, Privacy and Data Protection — annual Brussels conference"
-  - url: https://www.eff.org/events
-    notes: "EFF events and activism conferences"
-  - url: https://ainowinstitute.org
-    notes: "AI Now Institute — AI governance and accountability"
-  - url: https://www.iapp.org/conference
-    notes: "International privacy professionals association"
-  - url: https://papercall.io
-    notes: "CFP aggregator — broad but filterable by topic"
-  - url: https://datasociety.net/events
-    notes: "Data & Society — surveillance, power, tech accountability"
-  - url: https://aisafety.com/events-and-training
-    notes: "AI safety events aggregator — broad calendar of conferences and training"
-  - url: https://princint.ai/events/
-    notes: "PIBBSS / Principles of Intelligence — orgs Carey is actively tracking for involvement"
-  - url: https://fra.europa.eu/en/news-and-events/upcoming-events
-    notes: "EU Fundamental Rights Agency — surveillance, rights, power accountability from EU perspective"
+- notes: Broad CFP aggregator — good for academic and tech conferences
+  url: https://wikicfp.com
+- notes: Security and systems conferences with strong CFP culture
+  url: https://www.usenix.org/conferences
+- notes: ACM FAccT — fairness, accountability, transparency in AI
+  url: https://facctconference.org
+- notes: Computers, Privacy and Data Protection — annual Brussels conference
+  url: https://cpdpconferences.org
+- notes: EFF events and activism conferences
+  url: https://www.eff.org/events
+- notes: AI Now Institute — AI governance and accountability
+  url: https://ainowinstitute.org
+- notes: International privacy professionals association
+  url: https://www.iapp.org/conference
+- notes: CFP aggregator — broad but filterable by topic
+  url: https://papercall.io
+- notes: Data & Society — surveillance, power, tech accountability
+  url: https://datasociety.net/events
+- notes: AI safety events aggregator — broad calendar of conferences and training
+  url: https://aisafety.com/events-and-training
+- notes: PIBBSS / Principles of Intelligence — orgs Carey is actively tracking for
+    involvement
+  url: https://princint.ai/events/
+- notes: EU Fundamental Rights Agency — surveillance, rights, power accountability
+    from EU perspective
+  url: https://fra.europa.eu/en/news-and-events/upcoming-events
+- notes: Practitioner-focused AI safety and security conference in Asia Pacific with
+    CFPs for technical talks on offensive research, defensive techniques, and enterprise
+    AI deployment.
+  url: https://oasec.org/
+- notes: Annual academic conference on AI and digital ethics with peer-reviewed proceedings
+    and focus on transdisciplinary approaches.
+  url: https://paris-conference.com/
+- notes: UN Institute for Disarmament Research hosts annual global conference on AI,
+    security and ethics with focus on international peace and security dimensions.
+  url: https://unidir.org/
+- notes: Technology and Regulation journal/conference series covering tech governance,
+    digital sovereignty, and regulatory frameworks.
+  url: https://techreg.org/
+- notes: CenterForce hosts specialized AI governance summits for in-house counsel
+    and compliance officers navigating AI legal/regulatory risks.
+  url: https://cf-conferences.com/
+- notes: Annual UK conference on regulatory technology with strong focus on AI-driven
+    compliance solutions and regulatory accountability.
+  url: https://regtechconference.co.uk/
+- notes: ENACT (European Network Against Cybercrime and Terrorism) hosts events on
+    technology-facilitated harms and tech accountability.
+  url: https://enact-eu.net/
+- notes: Kellogg Institute hosts annual Global Democracy Conferences examining AI's
+    role in democratic backsliding and governance.
+  url: https://kellogg.nd.edu/
+- notes: AFL-CIO's annual civil and human rights conference addressing worker surveillance,
+    algorithmic management, and tech power.
+  url: https://themlkconference.org/
+- notes: InventU hosts AI governance and sustainability events with strong policy
+    focus; AI Governance Forum covers EU AI Act implementation and accountability
+  url: https://inventu.eu/
+- notes: Official UN platform for international AI governance cooperation established
+    by UN General Assembly; hosts major multilateral AI governance dialogues
+  url: https://www.un.org/global-dialogue-ai-governance/
+- notes: Future of Privacy Forum hosts annual DC Privacy Forum with strong focus on
+    AI governance, data protection, and digital rights; connects business, government,
+    civil society, and academia
+  url: https://fpf.org/
+- notes: NUS Law TRAIL (Technology, Robotics, Artificial Intelligence and the Law)
+    hosts academic conferences on AI governance and liability in Asia-Pacific region
+  url: https://law.nus.edu.sg/trail/
+- notes: techUK hosts Tech Policy Conference bringing together Westminster, Whitehall,
+    regulators, industry and academia on UK tech policy and regulation
+  url: https://www.techuk.org/
+- notes: IQPC hosts Digital Platform Regulation & Compliance Summit in London covering
+    DSA, DMA, AI Act, GDPR compliance for online platforms
+  url: https://www.iqpc.com/
+- notes: Comprehensive aggregator of security and privacy conference deadlines including
+    IEEE S&P, ACM CCS, USENIX Security, and specialized privacy conferences
+  url: https://sec-deadlines.github.io/
+- notes: AINext Conference in Las Vegas covers AI governance, ethical challenges,
+    and regulatory compliance; focuses on practical implementation strategies
+  url: https://ainextconference.com/
+- notes: Technology and Regulation journal/conference series from TILT (Tilburg Institute
+    for Law, Technology, and Society) - hosts TILTing Perspectives annual conference
+    covering tech governance, surveillance capitalism, algorithmic accountability,
+    and digital sovereignty
+  url: https://techreg.org
+- notes: Privacy Law Scholars Conference - annual workshop-style conference on privacy
+    law and information technology; brings together academics, practitioners, and
+    regulators
+  url: https://privacyscholars.org
+- notes: Bitkom Privacy Conference - annual German data protection conference with
+    European focus; covers GDPR, AI regulation, and digital rights
+  url: https://privacy-conference.com
+- notes: Forum Europe's Annual European Data Protection and Privacy Conference in
+    Brussels - key event for privacy professionals covering GDPR evolution and AI
+    governance
+  url: https://dataprotection-conference.com
+- notes: Privacy and Data Governance Symposium - international conference in Venice
+    bringing together data protection authorities, experts, and researchers
+  url: https://privacysymposium.org
+- notes: Ai4 - North America's largest AI conference covering enterprise AI, governance,
+    policy, and applications; includes dedicated AI Policy Summit track
+  url: https://ai4.io
+- notes: AI Gov World Conference - practitioner-focused event on AI governance, best
+    practices, and program management
+  url: https://aiworldconference.ai
+- notes: International Association for Safe and Ethical AI - hosts annual conference
+    on AI safety, alignment, control, and ethics
+  url: https://www.iaseai.org
+- notes: GovTech Events - hosts state and local government AI and technology conferences
+  url: https://events.govtech.com
+- notes: GovCIO Media & Research - hosts AI Summit for federal government and industry
+    leaders
+  url: https://govciomedia.com
+- notes: Comprehensive aggregator of security and privacy conference deadlines including
+    IEEE S&P, ACM CCS, USENIX Security, PETS, SOUPS, and many specialized security/privacy
+    conferences
+  url: https://sec-deadlines.github.io
+- notes: AI, Data & Analytics Network hosts Responsible AI Summit focused on AI governance,
+    security, risk management, and accountability. Enterprise-focused with strong
+    policy angle.
+  url: https://www.aidataanalytics.network/
+- notes: Digital Platform Regulation & Compliance Summit specifically for online platforms
+    dealing with DSA, DMA, AI Act, GDPR compliance - highly relevant to tech accountability
+    and regulatory topics.
+  url: https://www.iqpc.com/events-digital-platform-regulation-compliance-summit
+- notes: techUK's annual Tech Policy Conference brings together Westminster, Whitehall,
+    regulators, industry and academia - major UK tech policy event worth monitoring.
+  url: https://www.techuk.org/what-we-deliver/events/tech-policy-conference-2026.html
+- notes: ITU AI for Good Global Summit (co-located with UN Global Dialogue on AI Governance
+    in July 2026 Geneva) - major multilateral AI governance platform with 50+ UN agencies
+    involved.
+  url: https://aiforgood.itu.int/
+- notes: UNESCO Global Forum on the Ethics of AI (September 2026, Riyadh) - 4th edition
+    focusing on implementing UNESCO's Recommendation on the Ethics of AI with global
+    policymakers.
+  url: https://www.unesco.org/en/forum-ethics-ai
+- notes: Academic CFP aggregator with comprehensive listings for conferences across
+    computer science, law, and social sciences including AI governance and policy
+    topics
+  url: https://cfplist.com
+- notes: Data for Policy conference series focusing on AI-enabled governance, algorithmic
+    governance, and policy transformations - highly relevant to AI governance and
+    accountability
+  url: https://dataforpolicy.org
+- notes: AI Security Summit series focusing on intersection of AI, cybersecurity,
+    ethics, and governance
+  url: https://www.securitysummit.ai
+- notes: SecurityWeek's AI Risk Summit focusing on risk management in the age of AI
+    with emphasis on security and ethics
+  url: https://www.airisksummit.com
+- notes: EAI conference on safe, secure, ethical, and responsible technologies aligned
+    with UN SDGs
+  url: https://safertea.eai-conferences.org
+- notes: Opal Group conferences on compliance, governance, and risk management in
+    financial services and technology sectors
+  url: https://opalgroup.net
+- notes: Gender + Tech organization hosting Tech Abuse Conference on technology-facilitated
+    abuse and digital harms
+  url: https://www.genderandtech.net
+- notes: Conference aggregator with digital rights, privacy, and cybersecurity conference
+    listings
+  url: https://conferenceindex.org
+- notes: Academic conference aggregator with strong focus on law, AI, and technology
+    conferences. Good source for CFPs in AI regulation, digital rights, and technology
+    law.
+  url: https://knowledgesteez.com
+- notes: European media law and digital rights platform that tracks CFPs for conferences
+    on AI regulation, data protection, and digital governance.
+  url: https://www.medialaws.eu
+- notes: International Association for Artificial Intelligence and Law - hosts annual
+    ICAIL conference series and tracks AI law and policy events globally.
+  url: https://iaail.org
+- notes: IRM UK hosts major annual data governance, AI governance, and master data
+    management conferences in Europe with strong practitioner and policy focus.
+  url: https://irmuk.co.uk
+- notes: Major RegTech event covering regulatory technology, compliance, risk management,
+    and AI-driven compliance solutions - highly relevant to tech accountability and
+    regulatory frameworks.
+  url: https://fintech.global/globalregtechsummit/
+- notes: AIRe Journal of AI Law and Regulation publishes CFPs and tracks conferences
+    on AI regulation, data protection, and technology law globally.
+  url: https://www.lexxion.eu/en/journals/aire/
+- notes: Comprehensive AI and ML conference deadline tracker covering CS, neuroscience,
+    physics, and math conferences - useful for technical AI safety conferences.
+  url: https://trybibby.com/conference-deadlines
+- notes: AI Safety Events & Conferences directory - comprehensive calendar tracking
+    AI safety, alignment, security conferences and workshops globally including NeurIPS,
+    ICML, Black Hat AI tracks
+  url: https://aisecurityandsafety.org/en/events/
+- notes: RAID (Regulation of AI, Internet and Data) - Europe's leading forum bringing
+    together regulators, policymakers and industry leaders on AI governance, data
+    regulation and digital policy
+  url: https://www.raid.tech/
+- notes: FAR.AI Events - Foundation for AI Research hosts workshops on trustworthy
+    and secure AI, alignment research, technical seminars and international dialogues
+    on AI safety
+  url: https://www.far.ai/events
+- notes: AFAA (Algorithmic Fairness Across Alignment Procedures and Agentic Systems)
+    - Workshop addressing fairness in AI alignment and agentic systems, held at ICLR
+  url: https://www.afciworkshop.org/
+- notes: AI Safety Events & Training Newsletter - Weekly newsletter listing newly
+    announced AI safety events and training programs, both online and in-person
+  url: https://aisafetyeventsandtraining.substack.com/
+- notes: Privalogy - Curated calendar of global privacy and data protection events
+    with focus on GDPR, AI governance, privacy law across Europe, Americas, and Asia-Pacific
+  url: https://privalogy.com/p/privacy-and-data-protection-events
+- notes: USA Artificial Intelligence Summit 2026 in Washington, D.C. on June 17, focusing
+    on AI governance, policy, and the U.S. AI Action Plan. Highly relevant to AI governance
+    and policy topics.
+  url: https://us-aisummit.com/
+- notes: AI & Data Governance Summit 2026 in Melbourne (August 20) bringing together
+    data leaders and AI governance practitioners. Focuses on practical governance
+    frameworks and policy-as-code approaches.
+  url: https://dgx.group/adgsummit/
+- notes: AI+IM Global Summit 2026 focused on AI governance, information management,
+    and enterprise AI governance frameworks. Features expert faculty from IAPP and
+    OECD Expert Group on AI Risk.
+  url: https://www.aiim.org/aiim-global-summit-2026
+- notes: Ethics and Tech Conference 2026 at Seattle University (May 15) exploring
+    ethical and policy questions around emerging technologies, energy systems, and
+    security.
+  url: https://www.seattleu.edu/technology-ethics-initiative/conference/
+- notes: Tech Abuse Conference 2026 in London (May 19-21) addressing technology-facilitated
+    abuse, digital safety, and responsible innovation with academics, policymakers,
+    and tech leaders.
+  url: https://www.genderandtech.net/conference
+- notes: 28th Annual Victoria International Privacy & Security Summit (March 3-5,
+    2026) focusing on AI governance, privacy, security, and digital transformation
+    with up to 1,000 public sector professionals.
+  url: https://www.rebootcommunications.com/event/vipss2026/
+- notes: Safety Net's Tech Summit 2026 focusing on intersection of technology and
+    domestic violence, stalking, technology abuse, and intimate image abuse. Relevant
+    to tech accountability and digital harms.
+  url: https://nnedv.org/content/safety-nets-tech-summit-2026/
+- notes: Privacy + Security Forum Spring Academy 2026 in Washington, D.C. (May 6-8)
+    breaking down silos between privacy and security with practical compliance insights.
+  url: https://www.gtlaw.com/en/events/2026/05/privacy--security-forum-spring-academy-2026
+- notes: Corporate Governance & Ethics in the Age of AI 2026 conference by Opal Group
+    addressing AI's influence on boardroom decisions, transparency, risk management,
+    and regulatory compliance with focus on accountability and fairness.
+  url: https://opalgroup.net/conference/corporate-governance-and-ethics-in-the-age-of-ai-2026/
+- notes: 'Privacy, Data and Surveillance: Law and Practice (Feb 16-17, 2026) at UCL
+    Faculty of Laws - tenth annual course covering privacy, data protection, data
+    security, and surveillance with keynote on Live Facial Recognition in law enforcement.'
+  url: https://www.ucl.ac.uk/laws/events/2026/feb/privacy-data-and-surveillance-law-and-practice-2026
+- notes: 13th International Conference on Information Systems Security and Privacy
+    - addresses technological, social, and regulatory challenges regarding security,
+    privacy, and trust of modern information systems.
+  url: https://icissp.scitevents.org/
+- notes: Conference Index security and privacy section - aggregator with comprehensive
+    listings of security and privacy conferences worldwide including 2026 events.
+  url: https://conferenceindex.org/conferences/security-privacy
+- notes: Conference Index digital rights section - tracks digital rights, human rights,
+    and fundamental freedoms conferences globally.
+  url: https://conferenceindex.org/conferences/digital-rights
+- notes: 'UCL Privacy, Data and Surveillance: Law and Practice conference (February
+    2026) with focus on freedom to think, live facial recognition, and intersection
+    of law enforcement and emerging technologies.'
+  url: https://www.ucl.ac.uk/laws/events/2026/feb/privacy-data-and-surveillance-law-and-practice-2026
+- notes: Civil Rights Conference aggregator for USA events - tracks conferences on
+    civil rights and fundamental freedoms.
+  url: https://www.allconferencealert.com/usa/civil-rights-conference.html
+- notes: Conference Locate digital rights conferences tracker covering global digital
+    rights events.
+  url: https://www.clocate.com/conferences-on+digital-rights/
+- notes: Accountable AI Research Conference at Wharton (February 2027) - brings together
+    scholars from law and other fields on accountable, responsible, and governable
+    AI.
+  url: https://ai-analytics.wharton.upenn.edu/wharton-accountable-ai-lab/accountable-ai-research-conference/
+- notes: SecurityWeek's AI Risk Summit - focuses on AI governance frameworks, risk
+    management, security and ethics. Takes place at Ritz-Carlton, Half Moon Bay in
+    August. Highly relevant to AI safety and governance.
+  url: https://www.airisksummit.com/
+- notes: Real World AI Security Conference at Stanford - annual conference bringing
+    together academic researchers and industry practitioners on AI security, covering
+    attack techniques and defense strategies.
+  url: https://seclab.stanford.edu/RealWorldAIsec/
+- notes: Black Hat USA AI Summit - dedicated AI security track at Black Hat focusing
+    on AI safety, security, governance with 500+ senior executives. August 2026 in
+    Las Vegas.
+  url: https://blackhat.com/us-26/ai-summit.html
+- notes: Surveillance Studies Network Conference - biennial conference addressing
+    surveillance, power, and tech accountability. 2026 edition (June 9-12 in Lille,
+    France) focuses on surveillance and planetary governance.
+  url: https://surveillance-studies.net/conference/
+- notes: DIGITALEUROPE Summer Summit - annual conference on digital sovereignty, AI
+    regulation, data governance and EU tech policy. July 2026 in Brussels.
+  url: https://www.digitaleurope.org/events/
+- notes: European Commission news on tech sovereignty package (June 2026) - key policy
+    developments on EU digital sovereignty, AI Act, cloud governance, and semiconductor
+    strategy.
+  url: https://commission.europa.eu/news-and-media/
+- notes: Atlantic Council hosts events and publishes reports on digital sovereignty,
+    US-EU tech relations, and AI governance frameworks.
+  url: https://www.atlanticcouncil.org/
+- notes: CFPTime - Cybersecurity Conference Calls for Papers aggregator. Tracks CFPs
+    for upcoming cybersecurity conferences relevant to AI security and tech accountability.
+  url: https://www.cfptime.org/
+- notes: Call for Paper - academic CFP search engine with categories including AI,
+    ethics, law, and interdisciplinary studies. Good for finding emerging conferences
+    on AI governance.
+  url: https://callforpaper.org/
+- notes: Wharton AI & Analytics Initiative - hosts academic conferences on accountable
+    AI research, governance, and responsible AI development
+  url: https://ai-analytics.wharton.upenn.edu/
+- notes: Sovereign Tech Europe conference - annual Brussels event focused on European
+    technological sovereignty, digital infrastructure, and independence
+  url: https://eu-techsovereignty.com/
+- notes: PST Network - annual international conference on privacy, security, and trust
+    with focus on AI, data protection, and cybersecurity
+  url: https://pstnet.ca/
+- notes: Tech Policy Press - news and analysis on tech policy, AI governance, digital
+    sovereignty, and platform regulation; tracks major policy developments
+  url: https://www.techpolicy.press/
+- notes: Curated GitHub list of academic events on AI Security & Privacy - comprehensive
+    tracking of workshops, conferences, and research events
+  url: https://github.com/ZhengyuZhao/AI-Security-and-Privacy-Events
+- notes: Future of Life Institute AI Safety Summits tracker - tracks bi-annual international
+    government-convened AI safety summits and provides policy recommendations
+  url: https://futureoflife.org/project/ai-safety-summits/
+- notes: AAAI workshop series on AI governance covering alignment, morality, law,
+    and design - third edition in 2026, highly relevant to AI governance and policy
+    topics
+  url: https://aigovernance.github.io/
+- notes: NeurIPS workshop bringing together AI safety, AI for social good, and AI
+    policy/governance communities - covers trustworthy AI models, AI for public institutions,
+    and cooperative AI
+  url: https://trustworthy-ai-for-good.github.io/
+- notes: ICML/ICLR workshop series on agent safety and security in real-world deployments
+    - second edition at ICML 2026, covers safety and security challenges of agentic
+    AI systems
+  url: https://agentwild-workshop.github.io/
+- notes: NeurIPS workshop on Epistemic Intelligence in Machine Learning - third edition
+    covers foundational aspects of uncertainty, safety, and alignment
+  url: http://eiml.cc/
+- notes: GNI Rights & Risks Forum - multistakeholder forum on freedom of expression
+    and privacy rights at intersection of technology and human rights, held annually
+  url: https://globalnetworkinitiative.org/
+- notes: Research Institute for Sociotechnical Cyber Security hosts Cybernetic Culture
+    Workshop covering surveillance capitalism, platform governance, and digital culture
+  url: https://riscs.org.uk/
+- notes: Hertie School Centre for Fundamental Rights hosts annual workshops and events
+    on fundamental rights, digital technologies, and human rights research
+  url: https://www.hertie-school.org/en/fundamental-rights/
+- notes: ICML hosts numerous workshops on AI safety, governance, and trustworthy AI
+    - check workshop program annually for relevant tracks
+  url: https://icml.cc/
+- notes: ICLR hosts workshops on trustworthy AI, safety, interpretability, and robustness
+    - check workshop program for latest offerings
+  url: https://iclr.cc/

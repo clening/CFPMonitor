@@ -101,7 +101,8 @@ Output a single JSON block with this exact structure — no other text after it:
       "name": "string",
       "type": "CFP | Speaker Opportunity | Fellowship | Registration | Seminar",
       "deadline": "YYYY-MM-DD or null",
-      "event_dates": "string",
+      "event_dates": "string (human-readable, e.g. 'October 14-16, 2026')",
+      "start_date": "YYYY-MM-DD — the first day of the event, or null if unknown",
       "organizer": "string",
       "organizer_email": "email address or null",
       "location": "string or Virtual",
@@ -118,31 +119,17 @@ Output a single JSON block with this exact structure — no other text after it:
 }}"""
 
 
-def run_session(client: anthropic.Anthropic, agent_id: str, env_id: str, task_message: str) -> str:
-    """Create a session, send the task, stream until idle, return the agent's full text output.
-
-    Why wait for status_idle? The agent calls multiple tools in sequence (web_search,
-    then web_fetch on individual pages, then more searches). status_idle is the signal
-    that it has truly finished — not just paused between tool calls."""
-    session = client.beta.sessions.create(
-        agent=agent_id,
-        environment_id=env_id,
-        title=f"CFP discovery {date.today().isoformat()}",
-    )
-    log.info(f"Session created: {session.id}")
-
+def _stream_until_idle(client: anthropic.Anthropic, session_id: str, message: str) -> str:
+    """Send one message to a session and collect all agent text until status_idle."""
     final_text = ""
-
-    with client.beta.sessions.events.stream(session.id) as stream:
-        # Send the task after opening the stream — the API buffers events until the stream attaches
+    with client.beta.sessions.events.stream(session_id) as stream:
         client.beta.sessions.events.send(
-            session.id,
+            session_id,
             events=[{
                 "type": "user.message",
-                "content": [{"type": "text", "text": task_message}],
+                "content": [{"type": "text", "text": message}],
             }],
         )
-
         for event in stream:
             if event.type == "agent.message":
                 for block in event.content:
@@ -151,10 +138,27 @@ def run_session(client: anthropic.Anthropic, agent_id: str, env_id: str, task_me
             elif event.type == "agent.tool_use":
                 log.info(f"Tool call: {event.name}")
             elif event.type == "session.status_idle":
-                log.info("Session idle — agent finished")
+                log.info("Session idle")
                 break
-
     return final_text
+
+
+def run_session(client: anthropic.Anthropic, agent_id: str, env_id: str, task_message: str) -> tuple[str, str]:
+    """Create a session, send the task, stream until idle, return (agent_text, session_id).
+
+    Why wait for status_idle? The agent calls multiple tools in sequence (web_search,
+    then web_fetch on individual pages, then more searches). status_idle is the signal
+    that it has truly finished — not just paused between tool calls.
+
+    Returns the session_id so callers can send a follow-up if the output is incomplete."""
+    session = client.beta.sessions.create(
+        agent=agent_id,
+        environment_id=env_id,
+        title=f"CFP discovery {date.today().isoformat()}",
+    )
+    log.info(f"Session created: {session.id}")
+    final_text = _stream_until_idle(client, session.id, task_message)
+    return final_text, session.id
 
 
 def extract_json(text: str) -> dict:
@@ -220,10 +224,27 @@ def main() -> None:
     )
 
     log.info("Starting agent session...")
-    agent_output = run_session(client, config["agent_id"], config["env_id"], task_message)
+    agent_output, session_id = run_session(client, config["agent_id"], config["env_id"], task_message)
+
+    # If the agent went idle without producing JSON, send one follow-up nudge.
+    # The session is still alive after status_idle — it has all tool history in context,
+    # so a short prompt is usually enough to get the structured output.
+    if not re.search(r'\{[\s\S]*\}', agent_output):
+        log.warning("Agent output contained no JSON — sending follow-up prompt")
+        followup = _stream_until_idle(
+            client, session_id,
+            "You've finished your research. Now output ONLY the JSON block as specified "
+            "in the original task — events and new_sources. No other text.",
+        )
+        agent_output = followup
 
     log.info("Parsing agent output...")
-    result = extract_json(agent_output)
+    try:
+        result = extract_json(agent_output)
+    except ValueError as e:
+        log.error(f"Could not extract JSON from agent output: {e}")
+        log.error("Raw agent output logged above. Check logs/run.log for details.")
+        sys.exit(1)
 
     events = result.get("events", [])
     new_sources = result.get("new_sources", [])

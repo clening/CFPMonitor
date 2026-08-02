@@ -44,8 +44,8 @@ At the end of your research, output a single JSON block with two arrays:
 Do not include any other text after the JSON block."""
 
 HEADERS = [
-    "Name", "Type", "Deadline", "Event Date(s)", "Organizer",
-    "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added",
+    "Name", "Type", "Deadline", "Event Date(s)", "Start Date",
+    "Organizer", "Organizer Email", "Location", "URL", "Topics", "Status", "Notes", "Date Added",
 ]
 
 
